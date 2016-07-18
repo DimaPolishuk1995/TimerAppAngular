@@ -1,0 +1,114 @@
+<!doctype html>
+<html ng-app="purchaseApp">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles/style.css">
+</head>
+<body ng-controller="purchaseController">
+    <div class="panel">
+        <div class="form-inline">
+            <div class="form-group">
+                <div class="col-md-8">
+                    <input class="form-control" ng-model="text" placeholder = "What are you working on?" />
+                </div>
+            </div>
+					<div class="form-group">
+                <div class="col-md-2" ng-controller="myCtrl">
+									    <select  class="inputProject" ng-model="project">
+   										<option value="{{item.key}}" ng-disabled="item.key==project" ng-repeat="item in items">{{item.value}}</option>
+  									</select>
+                </div>
+            </div>
+					<div class="form-group">
+                <div class="col-md-8">
+                    <input class="secundomer" ng-model="timer" placeholder = "0 Sec" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-2">
+                    <button class="btn btn-start" ng-click="addItem1(dateBegin)">Start</button>
+                    <button class="btn btn-stop" ng-click="addItem(text,project,dateBegin,dateEnd)">Stop</button>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list.items">
+                    <td>{{item.purchase}}</td>
+                    <td>{{item.value}}</td>
+                    <td>{{item.dateBegin}} </td>
+					<td>{{item.dateEnd}} </td>
+                    <td>{{item.date}} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+<script>
+var model = {
+    items: [
+    ]
+};
+var purchaseApp = angular.module("purchaseApp", []);
+		purchaseApp.controller("myCtrl", function($scope) {
+$scope.project="select project";
+$scope.items =[
+		{ 
+       value:"select project"
+    },
+    { 
+       value:"timer"
+    },
+    {
+       value:"timer1"
+    }, 
+];
+  });
+    
+    purchaseApp.controller("purchaseController", function ($scope) {
+    $scope.list = model;
+    $scope.addItem1 = function Start(dateBegin) {
+       dateBegin = new Date();
+       dateBegin = dateBegin.toLocaleTimeString();
+        console.log(dateBegin);
+    }	
+    
+    $scope.addItem = function Stop(text, project,dateBegin,dateEnd,date) {
+		dateEnd = new Date();
+        dateEnd = dateEnd.toLocaleTimeString();
+        var dateBegin;
+        var date= dateEnd- dateBegin;
+        console.log(dateBegin);
+        if(text != "")
+        {
+            $scope.list.items.push({ purchase: text, project: project,dateBegin:dateBegin,dateEnd: dateEnd,date:date});
+        }
+    }
+		
+});
+    
+var visible = true;
+function addItem(text,project,date) {
+    if(visible) {
+        document.getElementById('btn btn-stop' ).style.display = 'none';
+        visible = false;
+    } else {
+        document.getElementById('btn btn-stop' ).style.display = 'block';
+        visible = true;
+    }
+}
+
+    
+
+	
+
+
+
+</script>
+</body>
+</html>
