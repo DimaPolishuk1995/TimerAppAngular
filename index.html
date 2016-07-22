@@ -10,7 +10,7 @@
       <div class="form-inline">
         <div class="form-group">
           <div class="col-md-8">
-            <input class="form-control" ng-model="text" placeholder = "What are you working on?" />
+            <input class="form-control" ng-model="name" placeholder = "What are you working on?" />
           </div>
         </div>
 	    <div class="form-group">
@@ -38,12 +38,15 @@
                 <th> Проэкт </th>
                 <th> Время начала работы </th>
                 <th> Время завершения работы </th>
+              <!-- <th> Потраченное время на задачу </th>  -->
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td  ng-repeat="item in tasks track by $index">{{item}}</td>
-              
+            <tr ng-repeat="item in list.tasks track by $index">
+              <td>{{item.name}}</td>
+              <td>{{item.selectedProject}}</td>
+              <td>{{item.dateBegin}}</td>
+              <td>{{item.dateFinish}}</td>  
             </tr>
           </tbody>
         </table>
@@ -52,12 +55,18 @@
    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script>
-        
+      var model ={
+       tasks :[
+         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59' ,dateDifference:'00:00:10'},
+         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59' ,dateDifference:'00:00:10'}  
+        ]
+      };
+      
       var timerApp = angular.module('timerApp', []);
       
       timerApp.controller("timerController", function ($scope) {
-          
-        $scope.tasks = [];
+        
+        $scope.list=model;
         $scope.selectedProject= "select project";
         $scope.project = [
           {project : "select project"},
@@ -66,19 +75,21 @@
           {project : "timer2"}
         ];
           
-        $scope.currentTask=[];
+        var currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:'', dateDifference:''};
         $scope.start = function Start() {
           var dateBegin = new Date();
           var dateBegin = dateBegin.toLocaleTimeString();
-          console.log(dateBegin);
-          $scope.currentTask.push(dateBegin);
-          
+          console.log(currentTask);
+          currentTask.name=$scope.name;
+          currentTask.selectedProject=$scope.selectedProject;
+          currentTask.dateBegin=dateBegin;
         }	
     
         $scope.stop = function Stop() {
-		  var dateFinish = new Date();
-          var dateFinish = dateFinish.toLocaleTimeString(); 
-          $scope.tasks.push($scope.text, $scope.selectedProject,$scope.currentTask,dateFinish);
+		      var dateFinish = new Date();
+          var dateFinish = dateFinish.toLocaleTimeString();
+          $scope.list.tasks.push({name:currentTask.name, dateFinish:dateFinish,selectedProject:currentTask.selectedProject,dateBegin:currentTask.dateBegin});
+          console.log($scope.list.tasks);
        
         }       
 		
