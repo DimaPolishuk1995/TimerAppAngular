@@ -36,17 +36,17 @@
             <tr>
                 <th> Задача </th>
                 <th> Проэкт </th>
-                <th> Время начала работы </th>
-                <th> Время завершения работы </th>
-              <!-- <th> Потраченное время на задачу </th>  -->
+                <th> Потраченное время на задачу </th>
+                <th> Время работы </th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="item in list.tasks track by $index">
               <td>{{item.name}}</td>
               <td>{{item.selectedProject}}</td>
-              <td>{{item.dateBegin}}</td>
-              <td>{{item.dateFinish}}</td>  
+              <td>{{item.dateDifference}}</td>
+              <td>{{item.dateBegin}} - {{item.dateFinish}} </td>
+              
             </tr>
           </tbody>
         </table>
@@ -57,8 +57,8 @@
     <script>
       var model ={
        tasks :[
-         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59' ,dateDifference:'00:00:10'},
-         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59' ,dateDifference:'00:00:10'}  
+         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59',dateDifference:'00:00:10'},
+         { name: "Задача № 2", selectedProject: 'timer', dateBegin:'19:58:59', dateFinish:'19:59:15',dateDifference:'00:00:16'}  
         ]
       };
       
@@ -73,26 +73,54 @@
           {project : "timer"},
           {project : "timer1"},
           {project : "timer2"}
+     
         ];
           
-        var currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:'', dateDifference:''};
+        var currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:''};
         $scope.start = function Start() {
           var dateBegin = new Date();
-          var dateBegin = dateBegin.toLocaleTimeString();
-          console.log(currentTask);
-          currentTask.name=$scope.name;
-          currentTask.selectedProject=$scope.selectedProject;
+          /*var dateBegin = dateBegin.toLocaleTimeString();*/
           currentTask.dateBegin=dateBegin;
-        }	
+          timeStart=new Date();
+          hoursStart=timeStart.getHours();
+          minutesStart=timeStart.getMinutes();
+          secondsStart=timeStart.getSeconds();
+          minutesStart=checkTime(minutesStart);
+          secondsStart=checkTime(secondsStart);
+          currentTask.dateBegin= document.getElementById.innerHTML=hoursStart+":"+minutesStart+":"+secondsStart;
+        }
+        
+        function checkTime(i){
+          if (i<10)
+            {
+               i="0" + i;
+            }
+          return i;
+       }
+     	
     
         $scope.stop = function Stop() {
+          currentTask.name=$scope.name;
+          currentTask.selectedProject=$scope.selectedProject;
 		      var dateFinish = new Date();
-          var dateFinish = dateFinish.toLocaleTimeString();
-          $scope.list.tasks.push({name:currentTask.name, dateFinish:dateFinish,selectedProject:currentTask.selectedProject,dateBegin:currentTask.dateBegin});
-          console.log($scope.list.tasks);
-       
-        }       
-		
+          /*var dateFinish = dateFinish.toLocaleTimeString();*/
+          timeStop=new Date();
+          hoursStop=timeStop.getHours();
+          minutesStop=timeStop.getMinutes();
+          secondsStop=timeStop.getSeconds();
+          minutesStop=checkTime(minutesStop);
+          secondsStop=checkTime(secondsStop);
+          dateFinish= document.getElementById.innerHTML=hoursStop+":"+ minutesStop+":"+secondsStop;
+          
+          hoursDifference =hoursStop-hoursStart;
+          minutesDifference =minutesStop-minutesStart;
+          secondsDifference=secondsStop-secondsStart;
+          minutesDifference=checkTime(minutesDifference);
+          secondsDifference=checkTime(secondsDifference);
+          var dateDifference= document.getElementById.innerHTML=hoursDifference+":"+minutesDifference+":"+secondsDifference;
+          
+          $scope.list.tasks.push({name:currentTask.name, dateFinish:dateFinish,selectedProject:currentTask.selectedProject,dateBegin:currentTask.dateBegin,dateDifference:dateDifference});          
+        }    
       });
     
     </script>
