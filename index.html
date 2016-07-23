@@ -10,12 +10,12 @@
       <div class="form-inline">
         <div class="form-group">
           <div class="col-md-8">
-            <input class="form-control" ng-model="name" placeholder = "What are you working on?" />
+            <input class="form-control" ng-model="currentTask.name" placeholder = "What are you working on?" />
           </div>
         </div>
 	    <div class="form-group">
           <div class="col-md-2">
-	        <select class="inputProject" ng-model="selectedProject" >
+	        <select class="inputProject" ng-model="currentTask.selectedProject" >
    		      <option ng-repeat="item in project" value="{{item.project}}">{{item.project}}</option> 
   		    </select>
           </div>
@@ -76,18 +76,18 @@
      
         ];
           
-        var currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:''};
+        $scope.currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:''};
         $scope.start = function Start() {
           var dateBegin = new Date();
           /*var dateBegin = dateBegin.toLocaleTimeString();*/
-          currentTask.dateBegin=dateBegin;
+          $scope.currentTask.dateBegin=dateBegin;
           timeStart=new Date();
           hoursStart=timeStart.getHours();
           minutesStart=timeStart.getMinutes();
           secondsStart=timeStart.getSeconds();
           minutesStart=checkTime(minutesStart);
           secondsStart=checkTime(secondsStart);
-          currentTask.dateBegin= document.getElementById.innerHTML=hoursStart+":"+minutesStart+":"+secondsStart;
+          $scope.currentTask.dateBegin= hoursStart+":"+minutesStart+":"+secondsStart;
         }
         
         function checkTime(i){
@@ -100,9 +100,7 @@
      	
     
         $scope.stop = function Stop() {
-          currentTask.name=$scope.name;
-          currentTask.selectedProject=$scope.selectedProject;
-		      var dateFinish = new Date();
+		      $scope.dateFinish = new Date();
           /*var dateFinish = dateFinish.toLocaleTimeString();*/
           timeStop=new Date();
           hoursStop=timeStop.getHours();
@@ -110,17 +108,19 @@
           secondsStop=timeStop.getSeconds();
           minutesStop=checkTime(minutesStop);
           secondsStop=checkTime(secondsStop);
-          dateFinish= document.getElementById.innerHTML=hoursStop+":"+ minutesStop+":"+secondsStop;
-          
+          $scope.dateFinish= document.getElementById=hoursStop+":"+ minutesStop+":"+secondsStop;
           hoursDifference =hoursStop-hoursStart;
           minutesDifference =minutesStop-minutesStart;
           secondsDifference=secondsStop-secondsStart;
           minutesDifference=checkTime(minutesDifference);
           secondsDifference=checkTime(secondsDifference);
-          var dateDifference= document.getElementById.innerHTML=hoursDifference+":"+minutesDifference+":"+secondsDifference;
+          var dateDifference= document.getElementById=hoursDifference+":"+minutesDifference+":"+secondsDifference;
+          $scope.currentTask.dateFinish=$scope.dateFinish;
           
-          $scope.list.tasks.push({name:currentTask.name, dateFinish:dateFinish,selectedProject:currentTask.selectedProject,dateBegin:currentTask.dateBegin,dateDifference:dateDifference});          
-        }    
+          $scope.list.tasks.push($scope.currentTask);  
+          $scope.currentTask= {};
+
+        }  
       });
     
     </script>
