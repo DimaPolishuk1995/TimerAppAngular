@@ -27,8 +27,7 @@
         </div>
         <div class="form-group">
           <div class="col-md-2">
-            <button class="btn btn-start" ng-click="start()">Start</button>
-            <button class="btn btn-stop"  ng-click="stop()">Stop</button>
+            <button class="btn btn-start" ng-click="startOrStop()" ng-bind="buttonText" ng-style="style"></button>
           </div>
         </div>
         <table class="table table-striped">
@@ -44,8 +43,8 @@
             <tr ng-repeat="item in list.tasks track by $index">
               <td>{{item.name}}</td>
               <td>{{item.selectedProject}}</td>
-              <td>{{item.dateDifference}}</td>
-              <td>{{item.dateBegin}} - {{item.dateFinish}} </td>
+              <td>{{dateDifference(item.dateBegin, item.dateFinish)}}</td>
+              <td>{{item.dateBegin.toLocaleTimeString()}} - {{item.dateFinish.toLocaleTimeString()}} </td>
               
             </tr>
           </tbody>
@@ -55,19 +54,44 @@
    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script>
+      
       var model ={
        tasks :[
-         { name: "Задача № 1", selectedProject: 'select project', dateBegin:'19:58:49', dateFinish:'19:58:59',dateDifference:'00:00:10'},
-         { name: "Задача № 2", selectedProject: 'timer', dateBegin:'19:58:59', dateFinish:'19:59:15',dateDifference:'00:00:16'}  
+         { name: "Задача № 1", selectedProject: 'select project', dateBegin:new Date('07 24, 2016 19:58:49'), dateFinish:new Date('07 24, 2016 19:58:59'),dateDifference:'00:00:10'},
+         { name: "Задача № 2", selectedProject: 'timer', dateBegin:new Date('07 24, 2016 19:58:59'), dateFinish:new Date('07 24, 2016 19:59:15'),dateDifference:'00:00:16'}  
         ]
       };
       
       var timerApp = angular.module('timerApp', []);
       
       timerApp.controller("timerController", function ($scope) {
+        var isStart = false;
+        var isStop = false;
+        $scope.buttonText = "Start";
+    
+       $scope.startOrStop= function() {
+         if (isStart) {
+           $scope.start();
+           isStart = false;
+           isStop = true;
+           $scope.buttonText = "Stop";
+      } 
+      
+        if (isStop) {
+          $scope.style={background: '#11dc51'};
+          $scope.stop();
+          isStop = false;
+          $scope.buttonText = "Start";
+      } else {
+        $scope.style={background: 'red'};
+          $scope.start();
+          isStop = true;
+          $scope.buttonText = "Stop";
+      }
+    };
         
+      
         $scope.list=model;
-        $scope.selectedProject= "select project";
         $scope.project = [
           {project : "select project"},
           {project : "timer"},
@@ -76,53 +100,43 @@
      
         ];
           
-        $scope.currentTask={name:'',selectedProject:'',dateBegin:'',dateFinish:''};
-        $scope.start = function Start() {
+        $scope.currentTask={name:'',selectedProject:'select project',dateBegin:'',dateFinish:''};
+        
+        $scope.start = function() {
           var dateBegin = new Date();
-          /*var dateBegin = dateBegin.toLocaleTimeString();*/
           $scope.currentTask.dateBegin=dateBegin;
-          timeStart=new Date();
-          hoursStart=timeStart.getHours();
-          minutesStart=timeStart.getMinutes();
-          secondsStart=timeStart.getSeconds();
-          minutesStart=checkTime(minutesStart);
-          secondsStart=checkTime(secondsStart);
-          $scope.currentTask.dateBegin= hoursStart+":"+minutesStart+":"+secondsStart;
         }
         
-        function checkTime(i){
-          if (i<10)
-            {
-               i="0" + i;
-            }
-          return i;
-       }
-     	
     
-        $scope.stop = function Stop() {
-		      $scope.dateFinish = new Date();
-          /*var dateFinish = dateFinish.toLocaleTimeString();*/
-          timeStop=new Date();
-          hoursStop=timeStop.getHours();
-          minutesStop=timeStop.getMinutes();
-          secondsStop=timeStop.getSeconds();
-          minutesStop=checkTime(minutesStop);
-          secondsStop=checkTime(secondsStop);
-          $scope.dateFinish= document.getElementById=hoursStop+":"+ minutesStop+":"+secondsStop;
-          hoursDifference =hoursStop-hoursStart;
-          minutesDifference =minutesStop-minutesStart;
-          secondsDifference=secondsStop-secondsStart;
-          minutesDifference=checkTime(minutesDifference);
-          secondsDifference=checkTime(secondsDifference);
-          var dateDifference= document.getElementById=hoursDifference+":"+minutesDifference+":"+secondsDifference;
-          $scope.currentTask.dateFinish=$scope.dateFinish;
-          
+        $scope.stop = function() {
+		      var dateFinish = new Date();     
+          $scope.currentTask.dateFinish=dateFinish;
           $scope.list.tasks.push($scope.currentTask);  
           $scope.currentTask= {};
 
         }  
+        
+        $scope.dateDifference= function(dateBegin, dateFinish){
+          var dateDifference=((Math.floor((dateFinish)/1000))-(Math.floor((dateBegin)/1000)));
+          var seconds = dateDifference %60; 
+          dateDifference-=seconds;
+          dateDifference = Math.floor (dateDifference/60);
+          var minutes = dateDifference%60; 
+          dateDifference-=minutes;
+          dateDifference = Math.floor (dateDifference/60);
+          var hours = dateDifference%60;
+          if (hours<10) hours='0'+hours;
+          if (minutes<10) minutes='0'+minutes;
+          if (seconds<10) seconds='0'+seconds;
+          dateDifference= hours+":"+minutes+":"+seconds;
+          return dateDifference;
+                
+        }
+          
       });
     
     </script>
   </body>
 </html>
+  
+ 

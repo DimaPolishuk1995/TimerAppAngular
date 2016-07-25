@@ -25,12 +25,5 @@
     font-size: 15px;
 }
 
-.btn-stop{color: #fffdfd;
-    background-color: #ff0b0b;
-    border-color: #000;
-    width: 100px;
-    margin-left: 10px;
-    font-size: 15px;
-}
 
 tr > td:nth-child(2) {color:blue;}
