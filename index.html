@@ -22,7 +22,9 @@
         </div>
 	    <div class="form-group">
           <div class="col-md-8">
-            <input class="secundomer" value = "00:00:00.00" />
+           <form name="clockform">
+              <input name="clock" size="12" maxlength="12" value="00:00:00"> 
+            </form>
           </div>
         </div>
         <div class="form-group">
@@ -56,82 +58,101 @@
     <script>
       
       var model ={
-       tasks :[
-         { name: "Задача № 1", selectedProject: 'select project', dateBegin:new Date('07 24, 2016 19:58:49'), dateFinish:new Date('07 24, 2016 19:58:59'),dateDifference:'00:00:10'},
-         { name: "Задача № 2", selectedProject: 'timer', dateBegin:new Date('07 24, 2016 19:58:59'), dateFinish:new Date('07 24, 2016 19:59:15'),dateDifference:'00:00:16'}  
-        ]
-      };
+        tasks :[
+          { name: "Задача № 1", selectedProject: 'select project', dateBegin:new Date('07 24, 2016 19:58:49'), dateFinish:new Date('07 24, 2016 19:58:59'),dateDifference:'00:00:10'},
+          { name: "Задача № 2", selectedProject: 'timer', dateBegin:new Date('07 24, 2016 19:58:59'), dateFinish:new Date('07 24, 2016 19:59:15'),dateDifference:'00:00:16'}  
+         ]
+       };
       
       var timerApp = angular.module('timerApp', []);
       
       timerApp.controller("timerController", function ($scope) {
-        var isStart = false;
-        var isStop = false;
+        
+        var clocktimer;
+
+        $scope.clearFields = function() {
+          isStart = 1;
+          clearTimeout(clocktimer);
+          document.clockform.clock.value='00:00:00';
+        }
+
+        $scope.startTIME =function() { 
+          var thisDate = new Date();
+          var t = thisDate.getTime() - $scope.currentTask.dateBegin.getTime();
+          t = Math.floor (t/1000);
+          var s = t%60; t-=s;
+          t = Math.floor (t/60);
+          var m = t%60; t-=m;
+          t = Math.floor (t/60);
+          var h = t%60;
+          if (h<10) h='0'+h;
+          if (m<10) m='0'+m;
+          if (s<10) s='0'+s;
+          if (isStart==0) document.clockform.clock.value = h + ':' + m + ':' + s ;
+          clocktimer = setTimeout($scope.startTIME,10);
+          }
+
+        var isStart = true;
         $scope.buttonText = "Start";
-    
-       $scope.startOrStop= function() {
-         if (isStart) {
-           $scope.start();
-           isStart = false;
-           isStop = true;
-           $scope.buttonText = "Stop";
-      } 
-      
-        if (isStop) {
+        
+        $scope.startOrStop= function() {
+          if (isStart == true) {
+            $scope.style={background: 'red'};
+            $scope.start();
+            $scope.startTIME();
+            isStart = false;
+            $scope.buttonText = "Stop";
+        } else {
           $scope.style={background: '#11dc51'};
           $scope.stop();
-          isStop = false;
+          $scope.clearFields();
+          isStart = true;
           $scope.buttonText = "Start";
-      } else {
-        $scope.style={background: 'red'};
-          $scope.start();
-          isStop = true;
-          $scope.buttonText = "Stop";
-      }
+        }
     };
         
       
-        $scope.list=model;
-        $scope.project = [
-          {project : "select project"},
-          {project : "timer"},
-          {project : "timer1"},
-          {project : "timer2"}
+       $scope.list=model;
+       $scope.project = [
+         {project : "select project"},
+         {project : "timer"},
+         {project : "timer1"},
+         {project : "timer2"}
      
-        ];
+      ];
           
-        $scope.currentTask={name:'',selectedProject:'select project',dateBegin:'',dateFinish:''};
+       $scope.currentTask={name:'',selectedProject:'select project',dateBegin:'',dateFinish:''};
         
-        $scope.start = function() {
-          var dateBegin = new Date();
-          $scope.currentTask.dateBegin=dateBegin;
+       $scope.start = function() {
+         var dateBegin = new Date();
+         $scope.currentTask.dateBegin=dateBegin;
         }
         
     
-        $scope.stop = function() {
-		      var dateFinish = new Date();     
-          $scope.currentTask.dateFinish=dateFinish;
-          $scope.list.tasks.push($scope.currentTask);  
-          $scope.currentTask= {};
+       $scope.stop = function() {
+		     var dateFinish = new Date();     
+         $scope.currentTask.dateFinish=dateFinish;
+         $scope.list.tasks.push($scope.currentTask);  
+         $scope.currentTask= {};
 
         }  
         
-        $scope.dateDifference= function(dateBegin, dateFinish){
-          var dateDifference=((Math.floor((dateFinish)/1000))-(Math.floor((dateBegin)/1000)));
-          var seconds = dateDifference %60; 
-          dateDifference-=seconds;
-          dateDifference = Math.floor (dateDifference/60);
-          var minutes = dateDifference%60; 
-          dateDifference-=minutes;
-          dateDifference = Math.floor (dateDifference/60);
-          var hours = dateDifference%60;
-          if (hours<10) hours='0'+hours;
-          if (minutes<10) minutes='0'+minutes;
-          if (seconds<10) seconds='0'+seconds;
-          dateDifference= hours+":"+minutes+":"+seconds;
-          return dateDifference;
-                
-        }
+       $scope.dateDifference= function(dateBegin, dateFinish){
+         var dateDifference=((Math.floor((dateFinish)/1000))-(Math.floor((dateBegin)/1000)));
+         var seconds = dateDifference %60; 
+         dateDifference-=seconds;
+         dateDifference = Math.floor (dateDifference/60);
+         var minutes = dateDifference%60; 
+         dateDifference-=minutes;
+         dateDifference = Math.floor (dateDifference/60);
+         var hours = dateDifference%60;
+         if (hours<10) hours='0'+hours;
+         if (minutes<10) minutes='0'+minutes;
+         if (seconds<10) seconds='0'+seconds;
+         dateDifference= hours+":"+minutes+":"+seconds;
+         return dateDifference;
+   
+       }
           
       });
     
@@ -139,4 +160,3 @@
   </body>
 </html>
   
- 
