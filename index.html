@@ -23,7 +23,7 @@
 	    <div class="form-group">
         <div class="col-md-8">
           <form name="clockform">
-            <input name="clock" size="12" maxlength="12" value="00:00:00"> 
+            <input name="clock" size="12" maxlength="12" ng-model="clock" ng-init="clock='00:00:00'"> 
           </form>
         </div>
       </div>
@@ -37,16 +37,20 @@
           <tr>
             <th> Задача </th>
             <th> Проэкт </th>
+            <th> Быстрый старт </th>
             <th> Потраченное время на задачу </th>
             <th> Время работы </th>
+            <th> Дата завершения проекта </th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="item in list.tasks track by $index">
+          <tr ng-repeat="item in tasks track by $index">
             <td>{{item.name}}</td>
             <td>{{item.selectedProject}}</td>
+            <td><button class="btn-quickStart" ng-click="quickStart()"></button></td>
             <td>{{dateDifference(item.dateBegin, item.dateFinish)}}</td>
             <td>{{item.dateBegin.toLocaleTimeString()}} - {{item.dateFinish.toLocaleTimeString()}} </td>
+            <td>{{item.dateFinish.toLocaleDateString()}}</td>
           </tr>
         </tbody>
       </table>
@@ -57,28 +61,20 @@
       
     <script>
       
-      var model ={
-        tasks :[
-          { name: "Задача № 1", selectedProject: 'select project', dateBegin:new Date('07 24, 2016 19:58:49'), dateFinish:new Date('07 24, 2016 19:58:59'),dateDifference:'00:00:10'},
-          { name: "Задача № 2", selectedProject: 'timer', dateBegin:new Date('07 24, 2016 19:58:59'), dateFinish:new Date('07 24, 2016 19:59:15'),dateDifference:'00:00:16'}  
+        var tasks =[
+          { name: "Задача № 1", selectedProject: 'select project', dateBegin:new Date('07 24, 2016 19:58:49'), dateFinish:new Date('07 24, 2016 19:58:59')},
+          { name: "Задача № 2", selectedProject: 'timer', dateBegin:new Date('07 25, 2016 19:58:30'), dateFinish:new Date('07 25, 2016 19:59:15')}  
         ]
-      };
+      
       
       var timerApp = angular.module('timerApp', []);
-      timerApp.controller("timerController", function ($scope) {
+      timerApp.controller("timerController", function ($scope,$timeout) {
         
         var clocktimer;
 
-        $scope.clearFields = function() {
-          isStart = 1;
-          clearTimeout(clocktimer);
-          document.clockform.clock.value='00:00:00';
-        }
-
         $scope.startTIME =function() { 
           var thisDate = new Date();
-          var t = thisDate.getTime() - $scope.currentTask.dateBegin.getTime();
-          t = Math.floor (t/1000);
+          var t = ((Math.floor(thisDate/1000)) - (Math.floor($scope.currentTask.dateBegin/1000)));
           var s = t%60; t-=s;
           t = Math.floor (t/60);
           var m = t%60; t-=m;
@@ -87,15 +83,19 @@
           if (h<10) h='0'+h;
           if (m<10) m='0'+m;
           if (s<10) s='0'+s;
-          if (isStart==0) document.clockform.clock.value = h + ':' + m + ':' + s ;
-          clocktimer = setTimeout($scope.startTIME,10);
+          if(isStart==0) $scope.clock = h + ':' + m + ':' + s ;
+          clocktimer = $timeout($scope.startTIME,1000);
         }
+        
 
         var isStart = true;
         $scope.buttonText = "Start";
+
+      
+
         
         $scope.startOrStop= function() {
-          if (isStart == true) {
+          if (isStart) {
             $scope.style={background: 'red'};
             $scope.start();
             $scope.startTIME();
@@ -104,13 +104,12 @@
         } else {
             $scope.style={background: '#11dc51'};
             $scope.stop();
-            $scope.clearFields();
             isStart = true;
             $scope.buttonText = "Start";
           }
         };
         
-        $scope.list=model;
+        $scope.tasks=tasks;
         $scope.project = [
           {project : "select project"},
           {project : "timer"},
@@ -123,12 +122,16 @@
         $scope.start = function() {
           var dateBegin = new Date();
           $scope.currentTask.dateBegin=dateBegin;
+          
         }
         
         $scope.stop = function() {
 		      var dateFinish = new Date();     
           $scope.currentTask.dateFinish=dateFinish;
-          $scope.list.tasks.push($scope.currentTask);  
+          $scope.tasks.push($scope.currentTask); 
+          clearTimeout(clocktimer);
+          $scope.clock='00:00:00';     
+          $scope.tasks.sort(tasksCompare); // сортируем массив
           $scope.currentTask= {};
         }  
         
@@ -147,6 +150,36 @@
           dateDifference= hours+":"+minutes+":"+seconds;
           return dateDifference;
         }
+                
+        $scope.quickStart = function() {
+          if(isStart) {
+            $scope.style={background: 'red'};
+            $scope.start();
+            $scope.startTIME();
+            isStart = false;
+            $scope.buttonText = "Stop";
+          }
+          else{
+            $scope.style={background: 'red'};
+            $scope.stop();
+            isStart = true;
+            $scope.buttonText = "Stop";
+          
+          }
+            
+          
+       }
+        
+       function tasksCompare(a,b)
+         {
+           var r=0;
+           if (a.dateFinish > b.dateFinish) { r = -1; }
+           if (a.dateFinish < b.dateFinish) { r = 1; }
+           return r;
+         }
+
+
+        
       });
     </script>
   </body>
