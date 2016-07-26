@@ -27,3 +27,16 @@
 
 
 tr > td:nth-child(2) {color:blue;}
+
+.form-group input{height:35px;}
+
+.btn-quickStart{margin-left: 30%; /* Отступ слева */
+    margin-right: 30%; /* Отступ справа */
+    width:15px;
+    height:20px;
+    background: url(../images/play.png) center/cover ;
+    border:none;
+    
+    
+
+}
