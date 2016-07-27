@@ -80,32 +80,18 @@
 
         var clocktimer;
 
-        $scope.startTIME = function() {
-          var thisDate = new Date();
-          var t = ((Math.floor(thisDate / 1000)) - (Math.floor($scope.currentTask.dateBegin / 1000)));
-          var s = t % 60;
-          t -= s;
-          t = Math.floor(t / 60);
-          var m = t % 60;
-          t -= m;
-          t = Math.floor(t / 60);
-          var h = t % 60;
-          if (h < 10) h = '0' + h;
-          if (m < 10) m = '0' + m;
-          if (s < 10) s = '0' + s;
-          if (isStart == 0) $scope.clock = h + ':' + m + ':' + s;
-          clocktimer = $timeout($scope.startTIME, 1000);
-        }
 
+        $scope.startTIME = function() {
+          if (isStart == 0) $scope.clock = $scope.dateDifference($scope.currentTask.dateBegin, new Date());
+          clocktimer = $timeout($scope.startTIME, 1000);
+          } 
 
         var isStart = true;
         $scope.buttonText = "Start";
 
         $scope.startOrStop = function() {
           if (isStart) {
-            $scope.style = {
-              background: 'red'
-            };
+            $scope.style = {background: 'red'};
             $scope.start();
             $scope.startTIME();
             isStart = false;
@@ -129,8 +115,8 @@
           project: "timer1"
         }, {
           project: "timer2"
-        }];
-
+        }                
+                ];
         $scope.currentTask = {
           name: '',
           selectedProject: 'select project',
@@ -150,7 +136,7 @@
           $scope.tasks.push($scope.currentTask);
           clearTimeout(clocktimer);
           $scope.clock = '00:00:00';
-          $scope.tasks.sort(tasksCompare); // сортируем массив
+          $scope.tasks.sort(tasksCompare);
           $scope.currentTask = {};
         }
 
@@ -177,7 +163,6 @@
             };
             $scope.start();
             $scope.startTIME();
-            $scope.tasks.name;
             isStart = false;
             $scope.buttonText = "Stop";
             $scope.currentTask.name=tasks.name;
