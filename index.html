@@ -80,29 +80,20 @@
 
         var clocktimer;
 
-
-        $scope.startTIME = function() {
-          if (isStart == 0) $scope.clock = $scope.dateDifference($scope.currentTask.dateBegin, new Date());
-          clocktimer = $timeout($scope.startTIME, 1000);
+        $scope.timer = function() {
+          $scope.clock = $scope.dateDifference($scope.currentTask.dateBegin, new Date());
+          clocktimer = $timeout($scope.timer, 1000);
+          
           } 
 
-        var isStart = true;
         $scope.buttonText = "Start";
 
         $scope.startOrStop = function() {
-          if (isStart) {
-            $scope.style = {background: 'red'};
+          if ($scope.currentTask.dateBegin==undefined) {
             $scope.start();
-            $scope.startTIME();
-            isStart = false;
-            $scope.buttonText = "Stop";
-          } else {
-            $scope.style = {
-              background: '#11dc51'
-            };
+            $scope.timer();
+          } else{
             $scope.stop();
-            isStart = true;
-            $scope.buttonText = "Start";
           }
         };
 
@@ -120,13 +111,14 @@
         $scope.currentTask = {
           name: '',
           selectedProject: 'select project',
-          dateBegin: '',
           dateFinish: ''
         };
 
         $scope.start = function() {
           var dateBegin = new Date();
           $scope.currentTask.dateBegin = dateBegin;
+           $scope.style = {background: 'red'};
+           $scope.buttonText = "Stop";
 
         }
 
@@ -134,10 +126,12 @@
           var dateFinish = new Date();
           $scope.currentTask.dateFinish = dateFinish;
           $scope.tasks.push($scope.currentTask);
-          clearTimeout(clocktimer);
+          $timeout.cancel(clocktimer);
           $scope.clock = '00:00:00';
           $scope.tasks.sort(tasksCompare);
           $scope.currentTask = {};
+          $scope.style = {background: '#11dc51' }
+          $scope.buttonText = "Start";
         }
 
         $scope.dateDifference = function(dateBegin, dateFinish) {
@@ -157,28 +151,16 @@
         }
 
         $scope.quickStart=function(tasks){
-          if (isStart) {
-            $scope.style = {
-              background: 'red'
-            };
+          if ($scope.currentTask.dateBegin==undefined) {
             $scope.start();
-            $scope.startTIME();
-            isStart = false;
-            $scope.buttonText = "Stop";
-            $scope.currentTask.name=tasks.name;
-            $scope.currentTask.selectedProject=tasks.selectedProject;
-
+            $scope.timer();
           } else {
-            $scope.style = {
-              background: 'red'
-            };
             $scope.stop();
-            var restart = $timeout($scope.quickStart, 100);
-            $scope.currentTask.name=tasks.name;
-            $scope.currentTask.selectedProject=tasks.selectedProject;
-            isStart = true;
+            /*var restartTimer = $timeout($scope.quickStart, 100);*/
             $scope.buttonText = "Stop";
           }
+            $scope.currentTask.name=tasks.name;
+            $scope.currentTask.selectedProject=tasks.selectedProject;
         }
 
         function tasksCompare(a, b) {
