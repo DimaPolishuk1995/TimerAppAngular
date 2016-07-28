@@ -91,7 +91,6 @@
         $scope.startOrStop = function() {
           if ($scope.currentTask.dateBegin==undefined) {
             $scope.start();
-            $scope.timer();
           } else{
             $scope.stop();
           }
@@ -119,6 +118,7 @@
           $scope.currentTask.dateBegin = dateBegin;
            $scope.style = {background: 'red'};
            $scope.buttonText = "Stop";
+           $scope.timer();
 
         }
 
@@ -151,14 +151,10 @@
         }
 
         $scope.quickStart=function(tasks){
-          if ($scope.currentTask.dateBegin==undefined) {
-            $scope.start();
-            $scope.timer();
-          } else {
+          if ($scope.currentTask.dateBegin!==undefined) {
             $scope.stop();
-            /*var restartTimer = $timeout($scope.quickStart, 100);*/
-            $scope.buttonText = "Stop";
           }
+            $scope.start();
             $scope.currentTask.name=tasks.name;
             $scope.currentTask.selectedProject=tasks.selectedProject;
         }
