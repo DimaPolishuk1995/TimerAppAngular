@@ -1,0 +1,48 @@
+<div data-ng-controller="HomepageCtrl">
+    <div class="container">
+        <h1>This application will show you how much time you spend on specific tasks</h1>
+        <div class="input">
+            <md-input-container class="md-block material eventInput" flex-gt-sm>
+                <input ng-model="currentTask.name" placeholder="What are you working on?">
+            </md-input-container>
+            <md-input-container class="md-block material" flex-gt-sm>
+                <md-select ng-model="currentTask.selectedProject" placeholder="select project">
+                    <md-option ng-repeat="item in project" ng-value="item.project">
+                        {{item.project}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="md-block material eventInput" flex-gt-sm>
+                <input ng-model="clock" ng-init="clock='00:00:00'">
+            </md-input-container>
+        </div>
+        <md-button class="md-raised md-primary" ng-model="buttonNextStep" ng-click="startOrStop()" ng-bind="buttonText"
+                   ng-style="style" style="background-color: rgb(89, 177, 59)">
+            Start
+        </md-button>
+    </div>
+    <div class="form-inline">
+        <table>
+            <tr>
+                <th> Задача</th>
+                <th> Проэкт</th>
+                <th> Быстрый старт</th>
+                <th> Потраченное время на задачу</th>
+                <th> Время работы</th>
+                <th> Дата завершения проекта</th>
+                <th> Удалить задачу</th>
+            </tr>
+            <tr ng-repeat="item in tasks track by $index">
+                <td>{{item.name}}</td>
+                <td>{{item.selectedProject}}</td>
+                <td>
+                    <button class="btn-quickStart" ng-click="quickStart(item)"></button>
+                </td>
+                <td>{{dateDifference(item.dateBegin, item.dateFinish)}}</td>
+                <td>{{item.dateBegin| date:'HH:mm:ss'}} - {{item.dateFinish| date:'HH:mm:ss'}}</td>
+                <td>{{item.dateFinish| date:'yyyy-MM-dd'}}</td>
+                <td> <i class="fa fa-trash-o" aria-hidden="true" ng-click="removeTask($index)"></i></td>
+            </tr>
+        </table>
+    </div>
+</div>

@@ -1,69 +1,56 @@
 <!doctype html>
-<html ng-app="timerApp">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="styles/main.css">
-  </head>
-  <body ng-controller="timerController">
-    <div class="panel">
-      <div class="form-inline">
-        <div class="form-group">
-          <div class="col-md-8">
-            <input class="form-control" ng-model="currentTask.name" placeholder="What are you working on?"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-2">
-            <select class="inputProject" ng-model="currentTask.selectedProject">
-   		        <option ng-repeat="item in project" value="{{item.project}}">{{item.project}}</option> 
-  		      </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-8">
-            <form name="clockform">
-              <input name="clock" size="12" maxlength="12" ng-model="clock" ng-init="clock='00:00:00'">
-            </form>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-2">
-            <button class="btn btn-start" ng-click="startOrStop()" ng-bind="buttonText" ng-style="style"></button>
-          </div>
-        </div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th> Задача </th>
-              <th> Проэкт </th>
-              <th> Быстрый старт </th>
-              <th> Потраченное время на задачу </th>
-              <th> Время работы </th>
-              <th> Дата завершения проекта </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="item in tasks track by $index">
-              <td>{{item.name}}</td>
-              <td>{{item.selectedProject}}</td>
-              <td><button class="btn-quickStart" ng-click="quickStart(item)"></button></td>
-              <td>{{dateDifference(item.dateBegin, item.dateFinish)}}</td>
-              <td>{{item.dateBegin.toLocaleTimeString()}} - {{item.dateFinish.toLocaleTimeString()}} </td>
-              <td>{{item.dateFinish.toLocaleDateString()}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>  
-  
-    <script src="../bower_components/angular/angular.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="../bower_components/angular-resource/angular-resource.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/localStorage.js"></script>
-  </body>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TRACK CREATIVE PROCESS</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css(.) styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.css" />
+        <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+        <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/reset.css">
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+    </head>
+    <body data-ng-app="trackProcess">
+
+        <!-- Add your site or application content here -->
+        <div class="content" data-ui-view></div>
+
+        <!-- build:js(.) scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="bower_components/ngstorage/ngStorage.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
+        <script src="bower_components/angular-material/angular-material.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/HomepageController.js"></script>
+        <script src="scripts/controllers/FilterEventController.js"></script>
+        <script src="scripts/routers.js"></script>
+        <script src="scripts/services/getArray.js"></script>
+        <script src="scripts/services/localStorage.js"></script>
+        <!-- endbuild -->
+    </body>
 </html>

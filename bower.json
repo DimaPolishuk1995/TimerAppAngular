@@ -1,21 +1,27 @@
 {
-  "name": "timer-app-angular",
+  "name": "eventScheduler",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "^1.4.0",
+    "angular": "^1.5.8",
     "bootstrap": "^3.2.0",
     "angular-animate": "^1.4.0",
     "angular-cookies": "^1.4.0",
     "angular-resource": "^1.4.0",
     "angular-route": "^1.4.0",
     "angular-sanitize": "^1.4.0",
-    "angular-touch": "^1.4.0"
+    "angular-touch": "^1.4.0",
+    "angular-bootstrap": "^2.2.0",
+    "angular-ui-router": "~0.3.1",
+    "ngstorage": "^0.3.11",
+    "angular-material": "^1.1.1",
+    "components-font-awesome": "^4.7.0"
   },
   "devDependencies": {
-    "angular-mocks": "^1.4.0"
+    "angular-mocks": "^1.4.0",
+    "angular-ui-select": "^0.19.6"
   },
   "appPath": "app",
-  "moduleName": "timerApp",
+  "moduleName": "eventScheduler",
   "overrides": {
     "bootstrap": {
       "main": [

@@ -1,42 +1,127 @@
-.panel{padding:50px 20px 0px 20px;}
-.form-inline{padding-bottom:25px;}
-
-
-.form-group select {height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
+.content {
     background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-.table{margin-top: 40px;}
+.container {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    max-width: 600px;
+    text-align: center;
+}
 
-.form-group .form-control {margin-left:-15px;}
-
-.btn-start {color: #fffdfd;
-    background-color: #11dc51;;
-    border-color: #000;
-    width: 100px;
-    margin-left: 10px;
-    font-size: 15px;
+h1 {
+    font-weight: 700;
+    padding: 20px 0;
 }
 
 
-tr > td:nth-child(2) {color:blue;}
+.input {
+    text-align: left;
+    display: inline-block;
+}
 
-.form-group input{height:35px;}
+.material {
+    display: inline-block !important;
+    margin: 0 0 18px 0;
+    padding-bottom: 0;
+    text-align: left;
+    vertical-align: middle;
+    float: left;
+    margin-right: 20px;
+}
 
-.btn-quickStart{margin-left: 30%; /* Отступ слева */
+.material:last-child {
+    margin-right: 0;
+}
+
+
+.md-input-focused > label {
+    display: none !important;
+}
+
+md-input-container.md-input-has-value label:not(.md-no-float) {
+    display: none;
+}
+
+.md-calendar-day-header th {
+    vertical-align: middle !important;
+}
+
+.fa {
+    float: right;
+    margin: 15px 10px 0 0;
+}
+
+.md-button {
+    margin: 0 8px 21px;
+}
+
+.md-select-value > span:not(.md-select-icon) {
+    max-width: 250px;
+}
+._md {
+    max-height: 190px;
+}
+
+.md-input-container {
+    width: 30%;
+    display: inline-block;
+}
+
+@media all and (max-width: 767px) {
+    .input {
+        text-align: center;
+    }
+
+    .material {
+        float: initial;
+    }
+
+    .md-button {
+        display: block !important;
+        margin: 0 auto;
+    }
+}
+
+.btn-quickStart {
+    margin-left: 30%; /* Отступ слева */
     margin-right: 30%; /* Отступ справа */
-    width:15px;
-    height:20px;
-    background: url(../images/play.png) center/cover ;
-    border:none;
-    
-    
+    width: 15px;
+    height: 20px;
+    background: url(../images/play.png) center/cover;
+    border: none;
 
+}
+
+.form-inline {
+    padding: 10px;
+}
+
+table {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+th, td:first-child {
+    background: #AFCDE7;
+    color: white;
+    padding: 10px 20px;
+}
+
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+
+td {
+    background: #D8E6F3;
+    padding: 10px;
+}
+
+th:first-child, td:first-child {
+    text-align: left;
 }
